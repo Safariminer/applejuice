@@ -1,0 +1,5 @@
+# Hello World in Applejuice language.
+# Variable declaration: <db/int> <varname> = <value>;
+
+db message = Hello world!;
+message.conwrite;
