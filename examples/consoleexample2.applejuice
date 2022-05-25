@@ -1,0 +1,7 @@
+# Simple "what'syername" program
+# Demonstration of user input
+
+db name;
+"What's your name? : ".conwrite;
+name.conget;
+"Hello, " + name + "!\n".conwrite;
