@@ -10,7 +10,6 @@ int main(){
 	std::vector<std::string> scriptlines; // This is the vector that will contain the ENTIRETY of your code(besides comments)
 	std::vector<std::string> cppcode; // This will contain EVERY SINGLE LINE of your transpiled code.
 	std::string file;
-	bool useraylib = false;
 	/* Preparser.
 	 * Tasks:
 	 * - Read the file
@@ -31,11 +30,11 @@ int main(){
 				line++;
 				if(currentline.rfind("#", 0) == 0) std::cout << "Info: Glanced over a comment\n";
 				else if(currentline == "") std::cout << "Info: Skipped empty line\n";
-				//else if((!hasEnding(currentline, ";") || !hasEnding(currentline, "{") || !hasEnding(currentline, "}")) && currentline.length() > 1){
+				else if(!hasEnding(currentline, ";") && currentline.length() > 1){
 					//std::cout << "ERROR: LINE " + (std::string)line + " HAS NO SEMICOLON!\n";
-					//printf("ERROR: LINE %i HAS NO SEMICOLON!\n", line);
-					//return 1;
-				//}
+					printf("ERROR: LINE %i HAS NO SEMICOLON!\n", line);
+					return 1;
+				}
 				else{
 					scriptlines.push_back(currentline);
 				}
@@ -60,17 +59,12 @@ int main(){
 		
 		for(int i = 0; i < scriptlines.size(); i++){
 			std::string temp;
-			if(scriptlines.at(i) == "grph_use;") useraylib = true;
 			if(scriptlines.at(i).rfind("db", 0) == 0){ 
 				scriptlines.at(i).erase(0, 3);
 				//scriptlines.at(i).pop_back();
 				temp = "std::string " + scriptlines.at(i);
 				cppcode.push_back(temp);
-			}
-			if(scriptlines.at(i).rfind("num_int", 0) == 0){
-				scriptlines.at(i).erase(0, 4);
-				cppcode.push_back(scriptlines.at(i));
-			}
+			} 
 			if(hasEnding(scriptlines.at(i), ".conwrite;")){
 				scriptlines.at(i).resize(scriptlines.at(i).size()-10);
 				temp = "std::cout << " + scriptlines.at(i) + ";";
@@ -80,10 +74,6 @@ int main(){
 				scriptlines.at(i).resize(scriptlines.at(i).size()-8);
 				temp = "std::cin >>" + scriptlines.at(i) + ";";
 				cppcode.push_back(temp);
-			}
-			if(scriptlines.at(i).rfind("cpp:", 0) == 0){
-				scriptlines.at(i).erase(0, 4);
-				cppcode.push_back(scriptlines.at(i));
 			}
 
 		}
@@ -98,7 +88,6 @@ int main(){
 		std::cout << "Now, the code is being written to a C++ file.\n";
 		std::ofstream convertedfile;
 		convertedfile.open({file + ".cpp"});
-		if(useraylib) convertedfile << "#include <raylib.h>\n";
 		convertedfile << "#include <iostream>\n#include <string.h>\n\nint main(){\n";
 		std::cout << "Wrote first part of boilerplate. Now writing transpiled code\n";
 		for(int i = 0; i < cppcode.size(); i++){

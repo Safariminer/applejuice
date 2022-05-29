@@ -1,0 +1,21 @@
+# Simple game made with Applejuice
+
+grph_use;
+cpp:InitWindow(1280, 720, "Applejuice Game");
+cpp:SetTargetFPS(120);
+num_int x = 0;
+num_int y = 0;
+"Initialized Window and Set Up a Target FPS".conwrite;
+cpp:while(!WindowShouldClose()){
+cpp:BeginDrawing();
+cpp:ClearBackground(BLACK);
+cpp:DrawText("Hello from Applejuice!", 0, 0, 10, WHITE);
+cpp:if(IsKeyDown(KEY_LEFT)) x--;
+cpp:if(IsKeyDown(KEY_RIGHT)) x++;
+cpp:if(IsKeyDown(KEY_UP)) y--;
+cpp:if(IsKeyDown(KEY_DOWN)) y++;
+cpp:DrawCircle(x, y, 10, GREEN);
+"Drew Character".conwrite;
+cpp:EndDrawing();
+cpp:}
+cpp:CloseWindow();
